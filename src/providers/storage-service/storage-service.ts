@@ -20,6 +20,10 @@ export class StorageService {
     return this.storage.get('ru-wif');
   }
 
+  clearData() {
+    return this.storage.clear();
+  }
+
   /*
   async getWif() {
     return await this.storage.get('ru-wif');

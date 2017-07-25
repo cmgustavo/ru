@@ -1,16 +1,25 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Receiver Unlimited
+      RU
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-card>
+    <ion-card-header class="head">
+      My bitcoin address
+      <div class="balance" (click)="updateBalance()">
+        <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
+        <ng-template #checkingBalance>...</ng-template>
+      </div>
+    </ion-card-header>
     <ion-card-content>
-      <ngx-qrcode [qrc-value]="address" ></ngx-qrcode>
-      <p>{{address}}</p>
+      <ngx-qrcode [qrc-value]="address" ngxClipboard [cbContent]="address"></ngx-qrcode>
+      <p class="address">
+        <a (click)="showOptions(address)">{{address}}</a>
+      </p>
     </ion-card-content>
   </ion-card>
 </ion-content>
