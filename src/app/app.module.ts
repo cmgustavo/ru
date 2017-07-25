@@ -11,7 +11,6 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
 /* Feature Modules */
-import { ClipboardModule } from 'ngx-clipboard';
 import { Toast } from '@ionic-native/toast';
 import { Clipboard } from '@ionic-native/clipboard';
 import { SocialSharing } from '@ionic-native/social-sharing';
@@ -29,7 +28,6 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
   imports: [
     HttpModule,
     BrowserModule,
-    ClipboardModule,
     NgxQRCodeModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
