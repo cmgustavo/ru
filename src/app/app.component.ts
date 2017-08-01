@@ -5,6 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
 
 import { HomePage } from '../pages/home/home';
+import { ExportPage } from '../pages/export/export';
+import { ImportPage } from '../pages/import/import';
+import { SettingPage } from '../pages/setting/setting';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -24,7 +28,10 @@ export class MyApp {
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', component: HomePage }
+      { title: 'Home', component: HomePage },
+      { title: 'Import', component: ImportPage },
+      { title: 'Export', component: ExportPage },
+      { title: 'Setting', component: SettingPage }
     ];
 
   }

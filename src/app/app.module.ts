@@ -10,6 +10,9 @@ import { NgLoggerModule, Level } from '@nsalaun/ng-logger';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { ExportPage } from '../pages/export/export';
+import { ImportPage } from '../pages/import/import';
+import { SettingPage } from '../pages/setting/setting';
 
 /* Feature Modules */
 import { Toast } from '@ionic-native/toast';
@@ -24,7 +27,10 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    ExportPage,
+    ImportPage,
+    SettingPage
   ],
   imports: [
     HttpModule,
@@ -37,7 +43,10 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    ImportPage,
+    ExportPage,
+    SettingPage
   ],
   providers: [
     StatusBar,
