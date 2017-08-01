@@ -17,6 +17,7 @@ import { AboutPage } from '../pages/about/about';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  language: string;
   rootPage: any = HomePage;
   activePage: any = HomePage;
 
@@ -31,25 +32,37 @@ export class MyApp {
   ) {
     this.initializeApp();
 
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Import', component: ImportPage },
-      { title: 'Export', component: ExportPage },
-      { title: 'Setting', component: SettingPage },
-      { title: 'About', component: AboutPage }
-    ];
-
+    translate.onLangChange.subscribe((event) => {
+      this.logger.info('Setting language changed to: ' + event.lang);
+      this.setMenu();
+    });
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.logger.info('Starting app...');
+      this.language = this.translate.getBrowserLang();
       this.translate.setDefaultLang('en');
-      this.translate.use('en');
+
+      // Set current language
+      this.translate.use(this.language);
+
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
         this.splashScreen.hide();
       }
+    });
+  }
+
+  setMenu() {
+    this.translate.get(['Home', 'Import', 'Export', 'Setting', 'About']).subscribe((res: string) => {
+      this.pages = [
+        { title: res['Home'], component: HomePage },
+        { title: res['Import'], component: ImportPage },
+        { title: res['Export'], component: ExportPage },
+        { title: res['Setting'], component: SettingPage },
+        { title: res['About'], component: AboutPage }
+      ];
     });
   }
 

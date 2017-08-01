@@ -4,5 +4,29 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "About"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
 msgid "My bitcoin address"
+msgstr ""
+
+msgid "Please wait..."
+msgstr ""
+
+msgid "Setting"
 msgstr ""

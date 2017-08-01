@@ -4,12 +4,25 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Setting</ion-title>
+    <ion-title>{{ 'Setting' | translate }}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
+
+  <ion-list>
+    <ion-item>
+      <ion-icon name="globe" item-start></ion-icon>
+      <ion-label>
+        {{ 'Language' | translate }}
+      </ion-label>
+      <ion-select [(ngModel)]="language" (ionChange)="translateTo(language)">
+        <ion-option value="en">English</ion-option>
+        <ion-option value="es">Español</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

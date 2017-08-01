@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Menu"
+msgstr "Menú"
+
+msgid "My bitcoin address"
+msgstr "Mi dirección bitcoin"
+
+msgid "Please wait..."
+msgstr "Por favor, espera..."
+
+msgid "Setting"
+msgstr "Configuración"

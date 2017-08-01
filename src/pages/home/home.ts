@@ -5,8 +5,10 @@ import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Toast } from '@ionic-native/toast';
+import { LoadingController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner'
+import { TranslateService } from '@ngx-translate/core';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 import { StorageService } from '../../providers/storage-service/storage-service';
@@ -29,10 +31,12 @@ export class HomePage {
     public plt: Platform,
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController,
+    public loadingCtrl: LoadingController,
     private barcodeScanner: BarcodeScanner,
     private toast: Toast,
     private clipboard: Clipboard,
     private socialSharing: SocialSharing,
+    private translate: TranslateService,
     private storage: StorageService,
     private wallet: WalletService,
     private blockchain: BlockchainService
@@ -57,11 +61,21 @@ export class HomePage {
   }
 
   public updateBalance() {
+    let loading;
+    this.translate.get('Please wait...').subscribe((res: string) => {
+      loading = this.loadingCtrl.create({
+        content: res
+      });
+    });
     this.updatingBalance = true;
+    loading.present();
     this.blockchain.getAddressInfo(this.address).map(res => res.json()).subscribe(data => {
       this.updatingBalance = false;
       this.balance = data.balance + data.unconfirmedBalance;
       this.balanceSat = data.balanceSat + data.unconfirmedBalanceSat;
+      setTimeout(() => {
+        loading.dismiss();
+      }, 1000);
     });
   }
 
