@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
@@ -9,15 +9,38 @@ import { HomePage } from '../pages/home/home';
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild(Nav) nav: Nav;
+
   rootPage:any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private logger: Logger) {
-    platform.ready().then(() => {
-      if (platform.is('cordova')) {
-        statusBar.styleDefault();
-        splashScreen.hide();
+  pages: Array<{title: string, component: any}>;
+
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    private logger: Logger
+  ) {
+    this.initializeApp();
+
+    this.pages = [
+      { title: 'Home', component: HomePage }
+    ];
+
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      if (this.platform.is('cordova')) {
+        this.statusBar.styleDefault();
+        this.splashScreen.hide();
       }
     });
   }
+
+  openPage(page) {
+    this.nav.setRoot(page.component);
+  }
+
 }
 
