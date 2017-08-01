@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Logger } from '@nsalaun/ng-logger';
 
 @Injectable()
 export class StorageService {
 
-  constructor(private storage: Storage) {
+  constructor(private storage: Storage, private logger: Logger) {
     storage.ready().then(() => {
-      console.log('Storage is ready.');
+      this.logger.log('Storage is ready.');
     });
   }
 
   setData(wif: string, address: string) {
-    console.log('Address and WIF stored.');
+    this.logger.log('Address and WIF stored.');
     this.storage.set('ru-wif', wif);
     this.storage.set('ru-address', address);
   }

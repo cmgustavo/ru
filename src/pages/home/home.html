@@ -7,19 +7,17 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-card>
-    <ion-card-header class="head">
-      My bitcoin address
-      <div class="balance" (click)="updateBalance()">
-        <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
-        <ng-template #checkingBalance>...</ng-template>
-      </div>
-    </ion-card-header>
-    <ion-card-content>
-      <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
-      <p class="address">
-        <a (click)="showOptions(address)">{{address}}</a>
-      </p>
-    </ion-card-content>
-  </ion-card>
+  <h1 class="head">
+    My bitcoin address
+  </h1>
+  <div class="balance" (click)="updateBalance()">
+    <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
+    <ng-template #checkingBalance>...</ng-template>
+  </div>
+  <div class="qr-code">
+    <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
+  </div>
+  <p class="address">
+    <a (click)="showOptions(address)">{{address}}</a>
+  </p>
 </ion-content>

@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { NgLoggerModule, Level } from '@nsalaun/ng-logger';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -29,6 +30,7 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
     HttpModule,
     BrowserModule,
     NgxQRCodeModule,
+    NgLoggerModule.forRoot(Level.LOG),
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
   ],
