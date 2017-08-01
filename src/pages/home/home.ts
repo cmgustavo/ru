@@ -56,11 +56,13 @@ export class HomePage {
         this.wif = this.wallet.wif;
         this.storage.setData(this.wallet.wif, this.wallet.address);
       }
-      this.updateBalance();
+      setTimeout(() => {
+        this.updateBalance();
+      }, 500);
     });
   }
 
-  public updateBalance() {
+  updateBalance() {
     let loading;
     this.translate.get('Please wait...').subscribe((res: string) => {
       loading = this.loadingCtrl.create({
@@ -79,7 +81,7 @@ export class HomePage {
     });
   }
 
-  private reCreateAddress() {
+  reCreateAddress() {
     console.log('Deleting address...');
     this.storage.clearData().then(() => {
       this.wallet.createAddress();
@@ -89,7 +91,7 @@ export class HomePage {
     });
   }
 
-  private copyToClipboard(data: string) {
+  copyToClipboard(data: string) {
     if (this.isCordova) {
       this.clipboard.copy(data);
       this.toast.show("Copied to clipboard", 'short', 'bottom').subscribe(
@@ -106,7 +108,7 @@ export class HomePage {
     }
   }
 
-  private shareAddress(data: string) {
+  shareAddress(data: string) {
     if (this.plt.is('cordova')) {
       this.socialSharing.share('My bitcoin address is: ' + data, 'My bitcoin address').then(() => {
         console.log('Success!');
@@ -116,7 +118,7 @@ export class HomePage {
     }
   }
 
-  private newAddress() {
+  newAddress() {
     let confirm = this.alertCtrl.create({
       title: 'Create new address',
       message: 'Are you sure you want to remove current address?',
@@ -136,7 +138,7 @@ export class HomePage {
     confirm.present();
   }
 
-  public showOptions(data: string) {
+  showOptions(data: string) {
     let buttons = [];
     buttons.push(
       {
@@ -182,7 +184,7 @@ export class HomePage {
     actionSheet.present();
   }
 
-  private sendAll() {
+  sendAll() {
 
     if (this.isCordova) {
       this.barcodeScanner.scan().then((barcodeData) => {

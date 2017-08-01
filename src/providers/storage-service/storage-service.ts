@@ -17,6 +17,14 @@ export class StorageService {
     this.storage.set('ru-address', address);
   }
 
+  getLanguage() {
+    return this.storage.get('ru-language');
+  }
+
+  setLanguage(lang: string) {
+    this.storage.set('ru-language', lang);
+  }
+
   getWif() {
     return this.storage.get('ru-wif');
   }

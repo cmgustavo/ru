@@ -1,16 +1,40 @@
 msgid ""
 msgstr ""
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Language-Team: \n"
-"X-Generator: Poedit 2.0.3\n"
 "Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: \n"
 "Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "About"
+msgstr "About"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Menu"
+msgstr "Menu"
 
 msgid "My bitcoin address"
 msgstr "My bitcoin address"
+
+msgid "Please wait..."
+msgstr "Please wait..."
+
+msgid "Setting"
+msgstr "Setting"

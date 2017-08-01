@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 
+import { StorageService } from '../../providers/storage-service/storage-service';
+
 @Component({
   selector: 'page-setting',
   templateUrl: 'setting.html',
@@ -12,7 +14,8 @@ export class SettingPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storage: StorageService
   ) {
     this.language = translate.currentLang;
   }
@@ -21,8 +24,10 @@ export class SettingPage {
     console.log('ionViewDidLoad SettingPage');
   }
 
-  translateTo(language: string) {
-    this.translate.use(language);
+  translateTo(lang: string) {
+    this.language = lang;
+    this.translate.use(lang);
+    this.storage.setLanguage(lang);
   }
 
 }

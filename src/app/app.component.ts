@@ -5,6 +5,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
 import { TranslateService } from '@ngx-translate/core';
 
+import { StorageService } from '../providers/storage-service/storage-service';
+
+import * as _ from 'lodash';
+
 import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
 import { ImportPage } from '../pages/import/import';
@@ -28,7 +32,8 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private logger: Logger,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storage: StorageService
   ) {
     this.initializeApp();
 
@@ -41,11 +46,7 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       this.logger.info('Starting app...');
-      this.language = this.translate.getBrowserLang();
-      this.translate.setDefaultLang('en');
-
-      // Set current language
-      this.translate.use(this.language);
+      this.setLanguage();
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
@@ -63,6 +64,21 @@ export class MyApp {
         { title: res['Setting'], component: SettingPage },
         { title: res['About'], component: AboutPage }
       ];
+    });
+  }
+
+  setLanguage() {
+    // Default browser language
+    this.translate.addLangs(['en', 'es']);
+    this.language = this.translate.getBrowserLang();
+    this.translate.setDefaultLang(this.language);
+
+    this.storage.getLanguage().then((res) => {
+      if (_.isEmpty(res)) {
+        this.translate.use(this.language);
+      } else {
+        this.translate.use(res);
+      }
     });
   }
 
