@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -7,6 +7,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule } from '@ionic/storage';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { NgLoggerModule, Level } from '@nsalaun/ng-logger';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import { TranslatePoHttpLoader } from '@biesbjerg/ngx-translate-po-http-loader';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -25,6 +27,10 @@ import { WalletService } from '../providers/wallet-service/wallet-service';
 import { StorageService } from '../providers/storage-service/storage-service';
 import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
 
+export function createTranslateLoader(http: Http) {
+	return new TranslatePoHttpLoader(http, 'assets/i18n', '.po');
+}
+
 @NgModule({
   declarations: [
     MyApp,
@@ -37,6 +43,13 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
   imports: [
     HttpModule,
     BrowserModule,
+    TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: createTranslateLoader,
+				deps: [Http]
+			}
+		}),
     NgxQRCodeModule,
     NgLoggerModule.forRoot(Level.LOG),
     IonicModule.forRoot(MyApp),

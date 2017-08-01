@@ -3,6 +3,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
+import { TranslateService } from '@ngx-translate/core';
 
 import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
@@ -24,7 +25,8 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    private logger: Logger
+    private logger: Logger,
+    private translate: TranslateService
   ) {
     this.initializeApp();
 
@@ -40,6 +42,9 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.logger.info('Starting app...');
+      this.translate.setDefaultLang('en');
+      this.translate.use('en');
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
         this.splashScreen.hide();
