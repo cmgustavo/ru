@@ -139,7 +139,7 @@ export class HomePage {
     if (this.balanceSat > 0) {
       buttons.push(
         {
-          text: 'Send all (' + this.balance + 'BTC)',
+          text: 'Send all',
           handler: () => {
             this.sendAll();
           }

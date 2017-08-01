@@ -4,15 +4,13 @@ page-home {
     font-weight: bold;
     text-align: center;
   }
+  .qr-code {
+    text-align: center;
+  }
   .address {
     text-align: center;
     a {
       cursor: pointer;
-    }
-  }
-  .share {
-    .icon {
-      margin-left: 10px;
     }
   }
   .balance {
