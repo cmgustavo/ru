@@ -17,7 +17,8 @@ import { AboutPage } from '../pages/about/about';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage:any = HomePage;
+  rootPage: any = HomePage;
+  activePage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -54,6 +55,11 @@ export class MyApp {
 
   openPage(page) {
     this.nav.setRoot(page.component);
+    this.activePage = page.component;
+  }
+
+  checkActivePage(page): boolean {
+    return page === this.activePage;
   }
 
 }
