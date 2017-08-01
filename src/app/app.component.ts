@@ -8,6 +8,7 @@ import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
 import { ImportPage } from '../pages/import/import';
 import { SettingPage } from '../pages/setting/setting';
+import { AboutPage } from '../pages/about/about';
 
 @Component({
   templateUrl: 'app.html'
@@ -31,7 +32,8 @@ export class MyApp {
       { title: 'Home', component: HomePage },
       { title: 'Import', component: ImportPage },
       { title: 'Export', component: ExportPage },
-      { title: 'Setting', component: SettingPage }
+      { title: 'Setting', component: SettingPage },
+      { title: 'About', component: AboutPage }
     ];
 
   }

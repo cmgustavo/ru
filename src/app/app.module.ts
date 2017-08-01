@@ -13,6 +13,7 @@ import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
 import { ImportPage } from '../pages/import/import';
 import { SettingPage } from '../pages/setting/setting';
+import { AboutPage } from '../pages/about/about';
 
 /* Feature Modules */
 import { Toast } from '@ionic-native/toast';
@@ -30,7 +31,8 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
     HomePage,
     ExportPage,
     ImportPage,
-    SettingPage
+    SettingPage,
+    AboutPage
   ],
   imports: [
     HttpModule,
@@ -46,7 +48,8 @@ import { BlockchainService } from '../providers/blockchain-service/blockchain-se
     HomePage,
     ImportPage,
     ExportPage,
-    SettingPage
+    SettingPage,
+    AboutPage
   ],
   providers: [
     StatusBar,
