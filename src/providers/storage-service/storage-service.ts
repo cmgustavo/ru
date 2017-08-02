@@ -7,7 +7,7 @@ export class StorageService {
 
   constructor(private storage: Storage, private logger: Logger) {
     storage.ready().then(() => {
-      this.logger.log('Storage is ready.');
+      this.logger.log('Storage is ready and initialized');
     });
   }
 

@@ -3,6 +3,8 @@ import { NavController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
+import { Logger } from '@nsalaun/ng-logger';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Toast } from '@ionic-native/toast';
 import { LoadingController } from 'ionic-angular';
@@ -15,8 +17,7 @@ import { StorageService } from '../../providers/storage-service/storage-service'
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html',
-  providers: [WalletService, BlockchainService, StorageService]
+  templateUrl: 'home.html'
 })
 export class HomePage {
   wif: string;
@@ -32,6 +33,8 @@ export class HomePage {
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
+    public events: Events,
+    private logger: Logger,
     private barcodeScanner: BarcodeScanner,
     private toast: Toast,
     private clipboard: Clipboard,
@@ -56,6 +59,7 @@ export class HomePage {
         this.wif = this.wallet.wif;
         this.storage.setData(this.wallet.wif, this.wallet.address);
       }
+      this.events.publish('address:created', this.address);
       setTimeout(() => {
         this.updateBalance();
       }, 500);

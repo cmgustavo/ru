@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+import { Logger } from '@nsalaun/ng-logger';
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 import * as _ from "lodash";
 import * as BitcoinLib from 'bitcoinjs-lib';
@@ -13,8 +14,11 @@ export class WalletService {
 
   constructor(
     private blockchain: BlockchainService,
+    private logger: Logger,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController
+  ) {
+    this.logger.debug('WalletService initialized.');
     this.network = BitcoinLib.networks.testnet;
   }
 

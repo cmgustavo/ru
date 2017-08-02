@@ -1,11 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
 import { TranslateService } from '@ngx-translate/core';
 
 import { StorageService } from '../providers/storage-service/storage-service';
+import { WalletService } from '../providers/wallet-service/wallet-service';
+import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
 
 import * as _ from 'lodash';
 
@@ -16,7 +18,8 @@ import { SettingPage } from '../pages/setting/setting';
 import { AboutPage } from '../pages/about/about';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [WalletService, BlockchainService, StorageService]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -31,6 +34,7 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
+    public events: Events,
     private logger: Logger,
     private translate: TranslateService,
     private storage: StorageService
@@ -40,6 +44,10 @@ export class MyApp {
     translate.onLangChange.subscribe((event) => {
       this.logger.info('Setting language changed to: ' + event.lang);
       this.setMenu();
+    });
+
+    events.subscribe('address:created', (address) => {
+      this.logger.info('Address created: ' + address);
     });
   }
 

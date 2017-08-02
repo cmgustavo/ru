@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Logger } from '@nsalaun/ng-logger';
 import { Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -7,7 +8,8 @@ import 'rxjs/add/operator/map';
 export class BlockchainService {
   host: string;
 
-  constructor(public http: Http) {
+  constructor(public http: Http, public logger: Logger) {
+    logger.debug('BlockchainService initialized.');
     this.host = 'https://test-insight.bitpay.com/api/';
   }
 
