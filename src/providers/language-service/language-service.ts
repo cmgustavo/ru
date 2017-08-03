@@ -5,7 +5,7 @@ import { ConfigService } from '../../providers/config-service/config-service';
 
 @Injectable()
 export class LanguageService {
-  public available: Array<Object> = [
+  public availables: Array<Object> = [
     {
       name: 'English',
       isoCode: 'en'
@@ -25,7 +25,7 @@ export class LanguageService {
 
     // Default browser language
     let languages: Array<string> = [];
-    for (let lang of this.available) {
+    for (let lang of this.availables) {
       languages.push(lang['isoCode']);
     }
     this.translate.addLangs(languages);

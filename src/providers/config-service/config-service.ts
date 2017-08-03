@@ -9,7 +9,8 @@ import * as _ from "lodash";
 export class ConfigService {
   private configCache: object;
   private default: object = {
-    language: 'en'
+    language: 'en',
+    network: 'testnet'
   };
 
   constructor(
@@ -22,6 +23,14 @@ export class ConfigService {
     this.storage.getConfig().then((localConfig) => {
       if (localConfig) {
         this.configCache = JSON.parse(localConfig);
+
+        if (_.isEmpty(this.configCache['language'])) {
+          this.configCache['language'] = this.default['language'];
+        }
+
+        if (_.isEmpty(this.configCache['network'])) {
+          this.configCache['network'] = this.default['network'];
+        }
       } else {
         this.configCache = _.clone(this.default);
       }

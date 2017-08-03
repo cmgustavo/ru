@@ -14,13 +14,19 @@
 
   <ion-list>
     <ion-item>
+      <ion-icon name="cloud" item-start></ion-icon>
+      <ion-label>Livenet</ion-label>
+      <ion-toggle [(ngModel)]="isLivenet" (ionChange)="toggleNetwork()"></ion-toggle>
+    </ion-item>
+    <ion-item>
       <ion-icon name="globe" item-start></ion-icon>
       <ion-label>
         {{ 'Language' | translate }}
       </ion-label>
-      <ion-select [(ngModel)]="currentLanguage" (ionChange)="translateTo(currentLanguage)">
-        <ion-option value="en">English</ion-option>
-        <ion-option value="es">Español</ion-option>
+      <ion-select
+        [(ngModel)]="currentLanguage"
+        (ionChange)="translateTo(currentLanguage)">
+        <ion-option *ngFor="let lang of availableLanguages" [value]="lang.isoCode">{{ lang.name }}</ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
