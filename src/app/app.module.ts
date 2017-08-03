@@ -26,6 +26,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { WalletService } from '../providers/wallet-service/wallet-service';
 import { StorageService } from '../providers/storage-service/storage-service';
 import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
+import { ConfigService } from '../providers/config-service/config-service';
+import { LanguageService } from '../providers/language-service/language-service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslatePoHttpLoader(http, 'assets/i18n', '.po');
@@ -74,7 +76,9 @@ export function createTranslateLoader(http: Http) {
     BarcodeScanner,
     WalletService,
     StorageService,
-    BlockchainService
+    BlockchainService,
+    ConfigService,
+    LanguageService
   ]
 })
 export class AppModule {}

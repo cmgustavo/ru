@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { StorageService } from '../providers/storage-service/storage-service';
 import { WalletService } from '../providers/wallet-service/wallet-service';
 import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
+import { ConfigService } from '../providers/config-service/config-service';
+import { LanguageService } from '../providers/language-service/language-service';
 
 import * as _ from 'lodash';
 
@@ -19,12 +21,11 @@ import { AboutPage } from '../pages/about/about';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [WalletService, BlockchainService, StorageService]
+  providers: [WalletService, BlockchainService, StorageService, ConfigService, LanguageService]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  language: string;
   rootPage: any = HomePage;
   activePage: any = HomePage;
 
@@ -37,9 +38,17 @@ export class MyApp {
     public events: Events,
     private logger: Logger,
     private translate: TranslateService,
-    private storage: StorageService
+    private storage: StorageService,
+    private config: ConfigService,
+    private language: LanguageService
   ) {
-    this.initializeApp();
+
+    events.subscribe('config:read', (config) => {
+      this.logger.info('Configuration read: ' + JSON.stringify(config));
+      this.language.init(config['language']);
+      this.setMenu();
+      this.initializeApp();
+    });
 
     translate.onLangChange.subscribe((event) => {
       this.logger.info('Setting language changed to: ' + event.lang);
@@ -54,7 +63,6 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       this.logger.info('Starting app...');
-      this.setLanguage();
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
@@ -72,21 +80,6 @@ export class MyApp {
         { title: res['Setting'], component: SettingPage },
         { title: res['About'], component: AboutPage }
       ];
-    });
-  }
-
-  setLanguage() {
-    // Default browser language
-    this.translate.addLangs(['en', 'es']);
-    this.language = this.translate.getBrowserLang();
-    this.translate.setDefaultLang(this.language);
-
-    this.storage.getLanguage().then((res) => {
-      if (_.isEmpty(res)) {
-        this.translate.use(this.language);
-      } else {
-        this.translate.use(res);
-      }
     });
   }
 

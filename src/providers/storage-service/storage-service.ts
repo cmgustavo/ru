@@ -29,6 +29,14 @@ export class StorageService {
     return this.storage.get('ru-wif');
   }
 
+  getConfig() {
+    return this.storage.get('ru-config');
+  }
+
+  setConfig(cnf: string) {
+    this.storage.set('ru-config', cnf);
+  }
+
   clearData() {
     return this.storage.clear();
   }
