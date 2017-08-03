@@ -5,13 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
 import { TranslateService } from '@ngx-translate/core';
 
-import { StorageService } from '../providers/storage-service/storage-service';
-import { WalletService } from '../providers/wallet-service/wallet-service';
-import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
-import { ConfigService } from '../providers/config-service/config-service';
-import { LanguageService } from '../providers/language-service/language-service';
-
-import * as _ from 'lodash';
 
 import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
@@ -20,14 +13,13 @@ import { SettingPage } from '../pages/setting/setting';
 import { AboutPage } from '../pages/about/about';
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [WalletService, BlockchainService, StorageService, ConfigService, LanguageService]
+  templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
-  activePage: any = HomePage;
+  public rootPage: any;
+  public activePage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -37,32 +29,21 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public events: Events,
     private logger: Logger,
-    private translate: TranslateService,
-    private storage: StorageService,
-    private config: ConfigService,
-    private language: LanguageService
+    private translate: TranslateService
   ) {
-
-    events.subscribe('config:read', (config) => {
-      this.logger.info('Configuration read: ' + JSON.stringify(config));
-      this.language.init(config['language']);
-      this.setMenu();
-      this.initializeApp();
-    });
-
+    this.initializeApp();
     translate.onLangChange.subscribe((event) => {
       this.logger.info('Setting language changed to: ' + event.lang);
       this.setMenu();
     });
-
-    events.subscribe('address:created', (address) => {
-      this.logger.info('Address created: ' + address);
-    });
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      this.logger.info('Starting app...');
+    this.logger.info('RU v0.0.1');
+    this.platform.ready().then((readySource) => {
+      this.logger.info('Plarform ready: ' + readySource);
+      this.rootPage = HomePage;
+      this.setMenu();
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();

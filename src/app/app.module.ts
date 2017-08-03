@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule, Http } from '@angular/http';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, APP_INITIALIZER } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -23,11 +23,11 @@ import { Clipboard } from '@ionic-native/clipboard';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 
-import { WalletService } from '../providers/wallet-service/wallet-service';
 import { StorageService } from '../providers/storage-service/storage-service';
-import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
 import { ConfigService } from '../providers/config-service/config-service';
 import { LanguageService } from '../providers/language-service/language-service';
+import { WalletService } from '../providers/wallet-service/wallet-service';
+import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslatePoHttpLoader(http, 'assets/i18n', '.po');
@@ -74,11 +74,17 @@ export function createTranslateLoader(http: Http) {
     SocialSharing,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     BarcodeScanner,
-    WalletService,
     StorageService,
-    BlockchainService,
     ConfigService,
-    LanguageService
+    LanguageService,
+    WalletService,
+    BlockchainService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (language: LanguageService) => () => language.load(),
+      deps: [LanguageService],
+      multi: true
+    }
   ]
 })
 export class AppModule {}

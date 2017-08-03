@@ -14,6 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 import { StorageService } from '../../providers/storage-service/storage-service';
+import { LanguageService } from '../../providers/language-service/language-service';
+import { ConfigService } from '../../providers/config-service/config-service';
 
 @Component({
   selector: 'page-home',
@@ -42,28 +44,36 @@ export class HomePage {
     private translate: TranslateService,
     private storage: StorageService,
     private wallet: WalletService,
-    private blockchain: BlockchainService
+    private blockchain: BlockchainService,
+    private language: LanguageService,
+    private config: ConfigService
   ) {
     this.isCordova = this.plt.is('cordova') ? true : false;
+    this.events.subscribe('wallet:updated', () => {
+      // TODO
+    });
+  }
+
+  ionViewDidEnter() {
+    console.log('[home.ts:70] #### DID ENTER'); //TODO
   }
 
   ionViewDidLoad() {
-    this.storage.getWif().then((wif) => {
-      if (wif) {
-        this.wif = wif;
-        this.wallet.importAddress(wif);
-        this.address = this.wallet.address;
-      } else {
-        this.wallet.createAddress();
-        this.address = this.wallet.address;
-        this.wif = this.wallet.wif;
-        this.storage.setData(this.wallet.wif, this.wallet.address);
-      }
-      this.events.publish('address:created', this.address);
-      setTimeout(() => {
-        this.updateBalance();
-      }, 500);
+    console.log('[home.ts:70] #### DID LOAD'); //TODO
+    this.wallet.init().then((wallet) => {
+      console.log('[home.ts:64]',wallet); //TODO
+      this.address = wallet['address'];
+      this.updateBalance();
     });
+  }
+
+  ionViewWillEnter() {
+    console.log('[home.ts:70] #### WILL ENTER'); //TODO
+  }
+
+  ionViewCanEnter(): boolean {
+    console.log('[home.ts:70] #### CAN ENTER'); //TODO
+    return true;
   }
 
   updateBalance() {
@@ -76,10 +86,10 @@ export class HomePage {
     this.updatingBalance = true;
     loading.present();
     this.blockchain.getAddressInfo(this.address).map(res => res.json()).subscribe(data => {
-      this.updatingBalance = false;
       this.balance = data.balance + data.unconfirmedBalance;
       this.balanceSat = data.balanceSat + data.unconfirmedBalanceSat;
       setTimeout(() => {
+        this.updatingBalance = false;
         loading.dismiss();
       }, 1000);
     });
@@ -87,12 +97,12 @@ export class HomePage {
 
   reCreateAddress() {
     console.log('Deleting address...');
-    this.storage.clearData().then(() => {
-      this.wallet.createAddress();
-      this.address = this.wallet.address;
-      this.wif = this.wallet.wif;
-      this.storage.setData(this.wallet.wif, this.wallet.address);
-    });
+    /*this.storage.clearData().then(() => {*/
+      //this.wallet.createAddress();
+      //this.address = this.wallet.address;
+      //this.wif = this.wallet.wif;
+      //this.storage.setData(this.wallet.wif, this.wallet.address);
+    /*});*/
   }
 
   copyToClipboard(data: string) {

@@ -12,6 +12,7 @@ export class ConfigService {
     language: 'en',
     network: 'testnet'
   };
+  private _queue: Array<any> = [];
 
   constructor(
     private events: Events,
@@ -19,22 +20,28 @@ export class ConfigService {
     private storage: StorageService
   ) {
     this.logger.debug('ConfigService initialized.');
+  }
 
-    this.storage.getConfig().then((localConfig) => {
-      if (localConfig) {
-        this.configCache = JSON.parse(localConfig);
+  public load() {
+    return new Promise((resolve, reject) => {
+      this.storage.ready().then(() => {
+        this.storage.getConfig().then((localConfig) => {
+          if (localConfig) {
+            this.configCache = JSON.parse(localConfig);
 
-        if (_.isEmpty(this.configCache['language'])) {
-          this.configCache['language'] = this.default['language'];
-        }
+            if (_.isEmpty(this.configCache['language'])) {
+              this.configCache['language'] = this.default['language'];
+            }
 
-        if (_.isEmpty(this.configCache['network'])) {
-          this.configCache['network'] = this.default['network'];
-        }
-      } else {
-        this.configCache = _.clone(this.default);
-      }
-      this.events.publish('config:read', this.configCache);
+            if (_.isEmpty(this.configCache['network'])) {
+              this.configCache['network'] = this.default['network'];
+            }
+          } else {
+            this.configCache = _.clone(this.default);
+          }
+          resolve(this.configCache);
+        });
+      });
     });
   }
 
