@@ -12,7 +12,6 @@ export class ConfigService {
     language: 'en',
     network: 'testnet'
   };
-  private _queue: Array<any> = [];
 
   constructor(
     private events: Events,

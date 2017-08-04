@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
+import { PopoverController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { Clipboard } from '@ionic-native/clipboard';
@@ -11,11 +12,9 @@ import { LoadingController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner'
 import { TranslateService } from '@ngx-translate/core';
+import { ActionsPage } from '../actions/actions';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
-import { StorageService } from '../../providers/storage-service/storage-service';
-import { LanguageService } from '../../providers/language-service/language-service';
-import { ConfigService } from '../../providers/config-service/config-service';
 
 @Component({
   selector: 'page-home',
@@ -36,17 +35,15 @@ export class HomePage {
     public actionSheetCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
     public events: Events,
+    public popoverCtrl: PopoverController,
     private logger: Logger,
     private barcodeScanner: BarcodeScanner,
     private toast: Toast,
     private clipboard: Clipboard,
     private socialSharing: SocialSharing,
     private translate: TranslateService,
-    private storage: StorageService,
     private wallet: WalletService,
     private blockchain: BlockchainService,
-    private language: LanguageService,
-    private config: ConfigService
   ) {
     this.isCordova = this.plt.is('cordova') ? true : false;
     this.events.subscribe('wallet:updated', () => {
@@ -95,14 +92,10 @@ export class HomePage {
     });
   }
 
-  reCreateAddress() {
-    console.log('Deleting address...');
-    /*this.storage.clearData().then(() => {*/
-      //this.wallet.createAddress();
-      //this.address = this.wallet.address;
-      //this.wif = this.wallet.wif;
-      //this.storage.setData(this.wallet.wif, this.wallet.address);
-    /*});*/
+  createWallet() {
+    this.wallet.createWallet();
+    this.address = this.wallet.get()['address'];
+    this.updateBalance();
   }
 
   copyToClipboard(data: string) {
@@ -110,13 +103,13 @@ export class HomePage {
       this.clipboard.copy(data);
       this.toast.show("Copied to clipboard", 'short', 'bottom').subscribe(
         toast => {
-          console.log('Success', toast);
+          this.logger.log('Success', toast);
         },
         error => {
-          console.log('Error', error);
+          this.logger.log('Error', error);
         },
         () => {
-          console.log('Completed');
+          this.logger.log('Completed');
         }
       );
     }
@@ -125,17 +118,17 @@ export class HomePage {
   shareAddress(data: string) {
     if (this.plt.is('cordova')) {
       this.socialSharing.share('My bitcoin address is: ' + data, 'My bitcoin address').then(() => {
-        console.log('Success!');
+        this.logger.log('Success!');
       }).catch(() => {
-        console.log('Error');
+        this.logger.log('Error');
       });
     }
   }
 
-  newAddress() {
+  confirmNewWallet() {
     let confirm = this.alertCtrl.create({
-      title: 'Create new address',
-      message: 'Are you sure you want to remove current address?',
+      title: 'Create new wallet',
+      message: 'Are you sure you want to remove this wallet and create a new one?',
       buttons: [
         {
           text: 'Cancel',
@@ -144,7 +137,7 @@ export class HomePage {
         {
           text: 'Yes',
           handler: () => {
-            this.reCreateAddress();
+            this.createWallet();
           }
         }
       ]
@@ -152,30 +145,57 @@ export class HomePage {
     confirm.present();
   }
 
-  showOptions(data: string) {
-    let buttons = [];
-    buttons.push(
-      {
-        text: 'New address',
-        role: 'destructive',
-        handler: () => {
-          this.newAddress();
-        }
-      }, {
-        text: 'Cancel',
-        role: 'cancel'
-      }
-    );
-    if (this.balanceSat > 0) {
-      buttons.push(
+  confirmSendAll() {
+    let confirm = this.alertCtrl.create({
+      title: 'Send all funds',
+      message: 'Are you sure you want to send all your funds from this wallet?',
+      buttons: [
         {
-          text: 'Send all',
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Yes',
           handler: () => {
             this.sendAll();
           }
         }
-      );
-    }
+      ]
+    });
+    confirm.present();
+  }
+
+  showWalletActions(myEvent) {
+    let popover = this.popoverCtrl.create(ActionsPage);
+    popover.present({
+      ev: myEvent
+    });
+    popover.onDidDismiss((data, role) => {
+      switch(data) {
+        case 'new': {
+          this.confirmNewWallet();
+          break;
+        }
+        case 'send': {
+          this.confirmSendAll();
+          break;
+        }
+        default: {
+          // Nothing
+          break;
+        }
+      }
+    });
+  }
+
+  showAddressActions(data: string) {
+    let buttons = [];
+    buttons.push(
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      }
+    );
     if (this.isCordova) {
       buttons.push(
         {
@@ -192,7 +212,7 @@ export class HomePage {
       );
     }
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Options',
+      title: 'Address actions',
       buttons: buttons
     });
     actionSheet.present();

@@ -16,6 +16,7 @@ import { ExportPage } from '../pages/export/export';
 import { ImportPage } from '../pages/import/import';
 import { SettingPage } from '../pages/setting/setting';
 import { AboutPage } from '../pages/about/about';
+import { ActionsPage } from '../pages/actions/actions';
 
 /* Feature Modules */
 import { Toast } from '@ionic-native/toast';
@@ -28,6 +29,7 @@ import { ConfigService } from '../providers/config-service/config-service';
 import { LanguageService } from '../providers/language-service/language-service';
 import { WalletService } from '../providers/wallet-service/wallet-service';
 import { BlockchainService } from '../providers/blockchain-service/blockchain-service';
+import { AppService } from '../providers/app-service/app-service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslatePoHttpLoader(http, 'assets/i18n', '.po');
@@ -40,7 +42,8 @@ export function createTranslateLoader(http: Http) {
     ExportPage,
     ImportPage,
     SettingPage,
-    AboutPage
+    AboutPage,
+    ActionsPage
   ],
   imports: [
     HttpModule,
@@ -64,7 +67,8 @@ export function createTranslateLoader(http: Http) {
     ImportPage,
     ExportPage,
     SettingPage,
-    AboutPage
+    AboutPage,
+    ActionsPage
   ],
   providers: [
     StatusBar,
@@ -84,7 +88,8 @@ export function createTranslateLoader(http: Http) {
       useFactory: (language: LanguageService) => () => language.load(),
       deps: [LanguageService],
       multi: true
-    }
+    },
+    AppService
   ]
 })
 export class AppModule {}

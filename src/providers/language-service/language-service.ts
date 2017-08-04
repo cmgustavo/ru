@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -21,11 +20,10 @@ export class LanguageService {
 
   constructor(
     private logger: Logger,
-    private events: Events,
     private translate: TranslateService,
     private config: ConfigService
   ) {
-    console.log('LanguageService initialized.');
+    this.logger.info('LanguageService initialized.');
   }
 
   load() {

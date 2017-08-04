@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-import { Events } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 import { ConfigService } from '../../providers/config-service/config-service';
@@ -12,16 +11,16 @@ import * as BitcoinLib from 'bitcoinjs-lib';
 @Injectable()
 export class WalletService {
   private network: Object;
-  public wif: string;
-  public address: string;
+  private networkName: string;
 
   private walletCache: Object = {
     wif: null,
-    address: null
+    address: null,
+    name: 'My simple wallet',
+    balance: 0
   };
 
   constructor(
-    private events: Events,
     private storage: StorageService,
     private config: ConfigService,
     private blockchain: BlockchainService,
@@ -35,32 +34,33 @@ export class WalletService {
   init() {
     return new Promise((resolve, reject) => {
       let cnf = this.config.get();
-      console.log('[wallet-service.ts:32]',cnf); //TODO
+      if (_.isNull(cnf)) {
+        resolve();
+        return;
+      }
+      this.networkName = cnf['network'];
 
-      if (cnf && cnf['network'] == 'livenet') {
-        this.network = BitcoinLib.networks.livenet;
+      if (this.networkName == 'livenet') {
+        this.network = BitcoinLib.networks.bitcoin;
       } else {
         this.network = BitcoinLib.networks.testnet;
       }
 
-      this.storage.getWallet(cnf['network']).then((localWallet) => {
+      this.storage.getWallet(this.networkName).then((localWallet) => {
         if (localWallet) {
           this.walletCache = JSON.parse(localWallet);
-          console.log('[wallet-service.ts:47]',this.walletCache); //TODO
         } else {
           // Create a new wallet
-          console.log('[wallet-service.ts:50] ####### create a new wallet'); //TODO
-          this.createAddress();
+          this.createWallet();
         }
         resolve(this.walletCache);
       });
     });
   }
 
-  set(newOpts: object) {
-    let cnf = this.config.get();
+  save(newOpts?: object) {
     let wallet = _.cloneDeep(this.walletCache);
-    this.storage.getWallet(cnf['network']).then((oldWallet) => {
+    this.storage.getWallet(this.networkName).then((oldWallet) => {
       oldWallet = oldWallet || {};
       if (_.isString(oldWallet)) {
         oldWallet = JSON.parse(oldWallet);
@@ -75,7 +75,7 @@ export class WalletService {
       _.merge(wallet, oldWallet, newOpts);
       this.walletCache = wallet;
 
-      this.storage.setWallet(JSON.stringify(this.walletCache), cnf['network']);
+      this.storage.setWallet(JSON.stringify(this.walletCache), this.networkName);
     });
   }
 
@@ -83,28 +83,29 @@ export class WalletService {
     return this.walletCache;
   }
 
-  importAddress(wif: string) {
-    console.log('Importing address from WIF');
+  importWallet(wif: string) {
+    this.logger.info('Importing wallet from WIF...');
     let keyPair = BitcoinLib.ECPair.fromWIF(wif, this.network);
-    this.wif = wif;
-    this.address = keyPair.getAddress();
-    this.walletCache['wif'] = this.wif;
-    this.walletCache['address'] = this.address;
-    this.set(this.walletCache);
-    console.log('Done: ' + this.address);
+    this.walletCache = {
+      wif: wif,
+      address: keyPair.getAddress()
+    };
+    this.save(this.walletCache);
   }
 
-  createAddress() {
-    console.log('Creating address');
+  createWallet() {
+    this.logger.info('Creating wallet...');
     let keyPair = BitcoinLib.ECPair.makeRandom({ network: this.network });
-    this.wif = keyPair.toWIF();
-    this.address = keyPair.getAddress();
-    this.walletCache['wif'] = this.wif;
-    this.walletCache['address'] = this.address;
-    this.set(this.walletCache);
-    console.log('Done: ' + this.address);
+    this.walletCache = {
+      wif: keyPair.toWIF(),
+      address: keyPair.getAddress()
+    };
+    this.save(this.walletCache);
   }
 
+  sendTransaction(wif: string, address: string, amountSat: number) {}
+
+    /*
   sendTransaction(wif: string, address: string, amountSat: number) {
     let loading = this.loadingCtrl.create({
       content: 'Sending transaction...'
@@ -141,5 +142,6 @@ export class WalletService {
       });
     });
   }
+     */
 
 }

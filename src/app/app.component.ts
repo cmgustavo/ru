@@ -12,6 +12,8 @@ import { ImportPage } from '../pages/import/import';
 import { SettingPage } from '../pages/setting/setting';
 import { AboutPage } from '../pages/about/about';
 
+import { AppService } from '../providers/app-service/app-service';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -21,6 +23,9 @@ export class MyApp {
   public rootPage: any;
   public activePage: any = HomePage;
 
+  private appName: string;
+  private appVersion: string;
+
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -29,7 +34,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public events: Events,
     private logger: Logger,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private app: AppService
   ) {
     this.initializeApp();
     translate.onLangChange.subscribe((event) => {
@@ -39,11 +45,11 @@ export class MyApp {
   }
 
   initializeApp() {
-    this.logger.info('RU v0.0.1');
     this.platform.ready().then((readySource) => {
       this.logger.info('Plarform ready: ' + readySource);
       this.rootPage = HomePage;
       this.setMenu();
+      this.setAppName();
 
       if (this.platform.is('cordova')) {
         this.statusBar.styleDefault();
@@ -61,6 +67,15 @@ export class MyApp {
         { title: res['Setting'], component: SettingPage },
         { title: res['About'], component: AboutPage }
       ];
+    });
+  }
+
+  setAppName() {
+    this.app.getName().subscribe((name) => {
+      this.appName = name;
+      this.app.getVersion().subscribe((version) => {
+        this.appVersion = version;
+      });
     });
   }
 

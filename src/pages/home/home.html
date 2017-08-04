@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="dark">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -8,17 +8,30 @@
 </ion-header>
 
 <ion-content padding>
-  <h1 class="head" translate>
-    My bitcoin address
-  </h1>
-  <h2 class="balance" (click)="updateBalance()">
-    <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
-    <ng-template #checkingBalance>...</ng-template>
-  </h2>
-  <div class="qr-code">
+  <ion-card>
+  <ion-card-header>
+    {{ 'My bitcoin address' | translate }}
+  </ion-card-header>
+  <ion-card-content>
     <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
-  </div>
+  </ion-card-content>
+</ion-card>
+
   <p class="address">
-    <a (click)="showOptions(address)">{{address}}</a>
+    <a (click)="showAddressActions(address)">{{address}}</a>
   </p>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <p class="balance">
+      <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
+      <ng-template #checkingBalance>...</ng-template>
+    </p>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showWalletActions($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

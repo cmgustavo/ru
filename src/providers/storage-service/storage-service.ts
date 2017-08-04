@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Logger } from '@nsalaun/ng-logger';
 
@@ -7,7 +6,6 @@ import { Logger } from '@nsalaun/ng-logger';
 export class StorageService {
 
   constructor(
-    private events: Events,
     private storage: Storage,
     private logger: Logger
   ) {
