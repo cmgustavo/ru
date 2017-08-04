@@ -12,4 +12,14 @@
 
 <ion-content padding>
 
+  <form (ngSubmit)="import()">
+    <ion-list>
+      <ion-item>
+        <ion-label stacked>WIF</ion-label>
+        <ion-input type="text" [(ngModel)]="form.wif" name="wif"></ion-input>
+      </ion-item>
+    </ion-list>
+    <button type="submit" [disabled]="!form.wif" ion-button block>{{ 'Import' | translate }}</button>
+  </form>
+
 </ion-content>

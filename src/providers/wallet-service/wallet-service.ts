@@ -33,6 +33,12 @@ export class WalletService {
 
   init() {
     return new Promise((resolve, reject) => {
+
+      if (!_.isEmpty(this.walletCache['address'])) {
+        resolve(this.walletCache);
+        return;
+      }
+
       let cnf = this.config.get();
       if (_.isNull(cnf)) {
         resolve();
