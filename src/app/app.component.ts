@@ -26,7 +26,7 @@ export class MyApp {
   private appName: string;
   private appVersion: string;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, icon: string}>;
 
   constructor(
     public platform: Platform,
@@ -61,21 +61,19 @@ export class MyApp {
   setMenu() {
     this.translate.get(['Home', 'Import', 'Export', 'Setting', 'About']).subscribe((res: string) => {
       this.pages = [
-        { title: res['Home'], component: HomePage },
-        { title: res['Import'], component: ImportPage },
-        { title: res['Export'], component: ExportPage },
-        { title: res['Setting'], component: SettingPage },
-        { title: res['About'], component: AboutPage }
+        { title: res['Home'], component: HomePage, icon: 'home' },
+        { title: res['Import'], component: ImportPage, icon: 'download' },
+        { title: res['Export'], component: ExportPage, icon: 'share-alt' },
+        { title: res['Setting'], component: SettingPage, icon: 'settings' },
+        { title: res['About'], component: AboutPage, icon: 'person' }
       ];
     });
   }
 
   setAppName() {
-    this.app.getName().subscribe((name) => {
-      this.appName = name;
-      this.app.getVersion().subscribe((version) => {
-        this.appVersion = version;
-      });
+    this.app.get().subscribe((app) => {
+      this.appName = app['name'];
+      this.appVersion = app['version'];
     });
   }
 

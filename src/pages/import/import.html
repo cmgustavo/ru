@@ -5,6 +5,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{ 'Import' | translate }}</ion-title>
+    <ion-buttons *ngIf="isCordova" end>
+      <button ion-button icon-only (click)="scanQR()">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

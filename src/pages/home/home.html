@@ -9,13 +9,13 @@
 
 <ion-content padding>
   <ion-card>
-  <ion-card-header>
-    {{ 'My bitcoin address' | translate }}
-  </ion-card-header>
-  <ion-card-content>
-    <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
-  </ion-card-content>
-</ion-card>
+    <ion-card-header>
+      {{ 'My bitcoin address' | translate }}
+    </ion-card-header>
+    <ion-card-content>
+      <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
+    </ion-card-content>
+  </ion-card>
 
   <p class="address">
     <a (click)="showAddressActions(address)">{{address}}</a>

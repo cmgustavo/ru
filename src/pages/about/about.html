@@ -12,4 +12,20 @@
 
 <ion-content padding>
 
+  <ion-card *ngIf="appInfo">
+    <ion-card-content>
+      <img src="../assets/img/logo.png" />
+      <p>
+        {{ appInfo.name }} v{{ appInfo.version }}
+      </p>
+      <p>
+        {{ appInfo.description }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <p class="link" *ngIf="appInfo">
+    <a href="{{ appInfo.github }}" translate>Source code</a>
+  </p>
+
 </ion-content>

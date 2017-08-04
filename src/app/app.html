@@ -9,9 +9,10 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages"
+      <button menuClose ion-item icon-left *ngFor="let p of pages"
         (click)="openPage(p)"
         [class.active]="checkActivePage(p.component)">
+        <ion-icon name="{{p.icon}}"></ion-icon>
         {{p.title}}
       </button>
     </ion-list>

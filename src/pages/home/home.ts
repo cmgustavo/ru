@@ -51,26 +51,12 @@ export class HomePage {
     });
   }
 
-  ionViewDidEnter() {
-    console.log('[home.ts:70] #### DID ENTER'); //TODO
-  }
-
   ionViewDidLoad() {
-    console.log('[home.ts:70] #### DID LOAD'); //TODO
+    console.log('ionViewDidLoad HomePage');
     this.wallet.init().then((wallet) => {
-      console.log('[home.ts:64]',wallet); //TODO
       this.address = wallet['address'];
       this.updateBalance();
     });
-  }
-
-  ionViewWillEnter() {
-    console.log('[home.ts:70] #### WILL ENTER'); //TODO
-  }
-
-  ionViewCanEnter(): boolean {
-    console.log('[home.ts:70] #### CAN ENTER'); //TODO
-    return true;
   }
 
   updateBalance() {

@@ -14,19 +14,8 @@ export class AppService {
     logger.debug('AppService initialized.');
   }
 
-  getName() {
+  get() {
     return this.http.get(this.jsonPath)
-      .map((res:Response) => res.json().name);
+      .map((res:Response) => res.json());
   }
-
-  getDescription() {
-    return this.http.get(this.jsonPath)
-      .map((res:Response) => res.json().description);
-  }
-
-  getVersion() {
-    return this.http.get(this.jsonPath)
-      .map((res:Response) => res.json().version);
-  }
-
 }
