@@ -25,7 +25,7 @@
 <ion-footer>
   <ion-toolbar>
     <p class="balance">
-      <span *ngIf="balanceSat >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
+      <span *ngIf="balance >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
       <ng-template #checkingBalance>...</ng-template>
     </p>
     <ion-buttons end>

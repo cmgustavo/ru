@@ -5,6 +5,8 @@ import { Logger } from '@nsalaun/ng-logger';
 import { Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import * as _ from 'lodash';
+
 import { ConfigService } from '../config-service/config-service';
 
 @Injectable()
@@ -32,6 +34,32 @@ export class BlockchainService {
     } else {
       this.host = 'https://test-insight.bitpay.com/api/';
     }
+  }
+
+  getBalance(addresses: string[]) {
+    let balance = 0
+    let unconfirmedBalance = 0;
+    let addressFunctions = [];
+    let self = this;
+    _.forEach(addresses, function(addr) {
+      addressFunctions.push(self.getAddressPromise(addr));
+    });
+    return Promise.all(addressFunctions).then(addr => {
+      _.forEach(addr, function(data) {
+        balance = balance + data.balance;
+        unconfirmedBalance = unconfirmedBalance + data.unconfirmedBalance;
+      });
+      return balance + unconfirmedBalance;
+    });
+  }
+
+  getAddressPromise(address: string) {
+    let self = this;
+    return new Promise((resolve, reject) => {
+      self.getAddressInfo(address).map((res) => res.json()).subscribe((data) => {
+        resolve(data);
+      });
+    });
   }
 
   getAddressInfo(address: string) {

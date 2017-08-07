@@ -20,7 +20,7 @@
   <form (ngSubmit)="import()">
     <ion-list>
       <ion-item>
-        <ion-label stacked>WIF</ion-label>
+        <ion-label stacked>{{ 'Wallet import format' | translate }} (WIF)</ion-label>
         <ion-input type="text" [(ngModel)]="form.wif" name="wif"></ion-input>
       </ion-item>
     </ion-list>

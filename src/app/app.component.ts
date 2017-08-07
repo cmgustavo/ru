@@ -72,7 +72,6 @@ export class MyApp {
 
   setAppName() {
     this.app.get().subscribe((app) => {
-      console.log('[app.component.ts:74]',JSON.stringify(app)); //TODO
       this.appName = app['name'];
       this.appVersion = app['version'];
     });

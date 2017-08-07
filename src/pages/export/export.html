@@ -11,16 +11,11 @@
 
 
 <ion-content padding>
-  <ion-card>
-    <ion-card-content>
-      <ngx-qrcode [qrc-value]="form.wif"></ngx-qrcode>
-    </ion-card-content>
-  </ion-card>
   <form (ngSubmit)="export()">
     <ion-list>
       <ion-item>
-        <ion-label stacked>WIF</ion-label>
-        <ion-textarea [(ngModel)]="form.wif" name="wif"></ion-textarea>
+        <ion-label stacked>{{ 'Wallet import format' | translate }} (WIF)</ion-label>
+        <ion-textarea [(ngModel)]="form.wif" name="wif" readonly></ion-textarea>
       </ion-item>
     </ion-list>
     <button type="submit" [disabled]="!form.wif" ion-button block>{{ 'Export' | translate }}</button>

@@ -32,6 +32,17 @@ export class ImportPage {
 
   import() {
     if (_.isEmpty(this.form)) return;
+
+    if (this.form['wif']) this.importWif();
+    //if (this.form['bip39']) this.importBip39();
+
+  }
+
+  importBip39() {
+    this.wallet.importWalletBip39(this.form['bip39']);
+  }
+
+  importWif() {
     this.wallet.importWallet(this.form['wif']);
     this.form['wif'] = null;
     let alert = this.alertCtrl.create({

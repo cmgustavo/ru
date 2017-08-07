@@ -7,9 +7,11 @@ import { ConfigService } from '../../providers/config-service/config-service';
 import { StorageService } from '../storage-service/storage-service';
 import * as _ from "lodash";
 import * as BitcoinLib from 'bitcoinjs-lib';
+import * as Bip39 from 'bip39';
 
 @Injectable()
 export class WalletService {
+  private MAX_ADDRESSES = 10;
   private network: Object;
   private networkName: string;
 
@@ -87,6 +89,30 @@ export class WalletService {
 
   get() {
     return this.walletCache;
+  }
+
+  getBalance() {
+    return new Promise((resolve, reject) => {
+      this.blockchain.getBalance([this.walletCache['address']]).then((data) => {
+        resolve(data);
+      });
+    });
+  }
+
+  importWalletBip39(code: string) {
+    let addresses = [];
+    if (!Bip39.validateMnemonic(code)) return;
+
+    let net = this.networkName == 'testnet' ? '1' : '0';
+    let seed = Bip39.mnemonicToSeed(code);
+    let root = BitcoinLib.HDNode.fromSeedBuffer(seed, this.network);
+    for (let i = 0; i < this.MAX_ADDRESSES; i++) {
+      let path = "m\/" + net  + "\'/0/" + i;
+      let rut = root.derivePath(path);
+      let addr = root.derivePath(path).getAddress();
+      addresses.push(addr);
+    }
+    // TODO: save all addresses
   }
 
   importWallet(wif: string) {

@@ -14,7 +14,6 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner'
 import { TranslateService } from '@ngx-translate/core';
 import { ActionsPage } from '../actions/actions';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
-import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 
 @Component({
   selector: 'page-home',
@@ -42,8 +41,7 @@ export class HomePage {
     private clipboard: Clipboard,
     private socialSharing: SocialSharing,
     private translate: TranslateService,
-    private wallet: WalletService,
-    private blockchain: BlockchainService,
+    private wallet: WalletService
   ) {
     this.isCordova = this.plt.is('cordova') ? true : false;
     this.events.subscribe('wallet:updated', () => {
@@ -68,9 +66,8 @@ export class HomePage {
     });
     this.updatingBalance = true;
     loading.present();
-    this.blockchain.getAddressInfo(this.address).map(res => res.json()).subscribe(data => {
-      this.balance = data.balance + data.unconfirmedBalance;
-      this.balanceSat = data.balanceSat + data.unconfirmedBalanceSat;
+    this.wallet.getBalance().then((balance) => {
+      this.balance = Number(balance);
       setTimeout(() => {
         this.updatingBalance = false;
         loading.dismiss();
