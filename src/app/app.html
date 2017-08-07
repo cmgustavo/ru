@@ -1,8 +1,8 @@
 <ion-menu class="menu" [content]="content">
   <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="dark">
       <ion-title>
-        {{appName}} v{{appVersion}}
+        {{ 'Menu' | translate }}
       </ion-title>
     </ion-toolbar>
   </ion-header>
@@ -16,6 +16,9 @@
         {{p.title}}
       </button>
     </ion-list>
+    <p class="about">
+      {{appName}} v{{appVersion}}
+    </p>
   </ion-content>
 
 </ion-menu>

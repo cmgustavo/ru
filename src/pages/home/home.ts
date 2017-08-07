@@ -198,7 +198,7 @@ export class HomePage {
       );
     }
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Address actions',
+      title: 'Bitcoin address',
       buttons: buttons
     });
     actionSheet.present();

@@ -19,4 +19,16 @@
   button.active {
     font-weight: bold;
   }
+  .item .icon {
+    line-height: .97;
+    padding-right: 0.6em;
+    vertical-align: text-bottom;
+  }
+  p.about {
+    text-align: center;
+    padding-top: 20px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+  }
 }

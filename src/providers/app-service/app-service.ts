@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AppService {
-  private jsonPath: string = '../assets/appConfig.json';
+  private jsonPath: string = 'assets/appConfig.json';
 
   constructor(
     public http: Http,
