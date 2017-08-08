@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { Platform, AlertController, ActionSheetController, PopoverController, LoadingController } from 'ionic-angular';
+import { Platform, NavController, AlertController, ActionSheetController, PopoverController, LoadingController } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Toast } from '@ionic-native/toast';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner'
 import { TranslateService } from '@ngx-translate/core';
 
 import { ActionsPage } from '../actions/actions';
+import { SendPage } from '../send/send';
 
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 
@@ -27,11 +27,11 @@ export class HomePage {
   constructor(
     public plt: Platform,
     public alertCtrl: AlertController,
+    public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
     public popoverCtrl: PopoverController,
     private logger: Logger,
-    private barcodeScanner: BarcodeScanner,
     private toast: Toast,
     private clipboard: Clipboard,
     private socialSharing: SocialSharing,
@@ -105,36 +105,6 @@ export class HomePage {
     }
   }
 
-  setWalletName() {
-    let alert = this.alertCtrl.create({
-      title: 'Wallet name',
-      inputs: [
-        {
-          name: 'name',
-          placeholder: 'My saving wallet',
-          value: this.walletName,
-          type: 'text'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Save',
-          handler: data => {
-            if (data && data.name) {
-              this.walletName = data.name;
-              this.wallet.save(data);
-            }
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
-
   confirmNewWallet() {
     let confirm = this.alertCtrl.create({
       title: 'Create new wallet',
@@ -155,26 +125,6 @@ export class HomePage {
     confirm.present();
   }
 
-  confirmSendAll() {
-    let confirm = this.alertCtrl.create({
-      title: 'Send all funds',
-      message: 'Are you sure you want to send all your funds from this wallet?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel'
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.sendAll();
-          }
-        }
-      ]
-    });
-    confirm.present();
-  }
-
   showWalletActions(myEvent) {
     let popover = this.popoverCtrl.create(ActionsPage);
     popover.present({
@@ -187,15 +137,11 @@ export class HomePage {
           break;
         }
         case 'send': {
-          this.confirmSendAll();
-          break;
-        }
-        case 'name': {
-          this.setWalletName();
+          this.navCtrl.push(SendPage);
           break;
         }
         default: {
-          // Nothing
+          // Nothing to do
           break;
         }
       }
@@ -231,40 +177,5 @@ export class HomePage {
     });
     actionSheet.present();
   }
-
-  sendAll() {
-
-    if (this.isCordova) {
-      this.barcodeScanner.scan().then((barcodeData) => {
-        this.wallet.sendTransaction(this.wif, barcodeData.text, this.balanceSat);
-      }, (err) => {
-        this.logger.error(err);
-      });
-    } else {
-      let prompt = this.alertCtrl.create({
-        title: 'Send to',
-        inputs: [
-          {
-            name: 'address',
-            placeholder: 'Bitcoin address'
-          },
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel'
-          },
-          {
-            text: 'OK',
-            handler: data => {
-              this.wallet.sendTransaction(this.wif, data.address, this.balanceSat);
-            }
-          }
-        ]
-      });
-      prompt.present();
-    }
-  }
-
 
 }

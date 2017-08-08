@@ -27,6 +27,7 @@ export class BlockchainService {
 
     this.events.subscribe('config:updated', (config) => {
       this.setHost(config['network']);
+      this.setFeeLevel(config['feeLevel']);
     });
   }
 
@@ -79,19 +80,24 @@ export class BlockchainService {
   }
 
   getEstimateFee() {
-    let blocks;
-    switch(this.feeLevel) {
-      case 'priority': blocks = 2;
-        break;
-      case 'normal': blocks = 6;
-        break;
-      case 'economy': blocks = 24;
-        break;
-      default: blocks = 6;
-        break;
-    }
-    let url = this.host + 'utils/estimatefee?nbBlocks=' + blocks;
-    return this.http.get(url);
+    return new Promise((resolve, reject) => {
+      let blocks;
+      switch(this.feeLevel) {
+        case 'priority': blocks = 2;
+          break;
+        case 'normal': blocks = 6;
+          break;
+        case 'economy': blocks = 24;
+          break;
+        default: blocks = 6;
+          break;
+      }
+      let url = this.host + 'utils/estimatefee?nbBlocks=' + blocks;
+      return this.http.get(url).map((res) => res.json()).subscribe((feeObj) => {
+        let feeBTC = feeObj[blocks];
+        resolve(feeBTC);
+      });
+    });
   }
 
   broadcastTx(rawTx: string) {

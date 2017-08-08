@@ -91,6 +91,7 @@ export class WalletService {
   getBalance() {
     return new Promise((resolve, reject) => {
       this.blockchain.getBalance([this.walletCache['address']]).then((data) => {
+        this.walletCache['balance'] = data;
         resolve(data);
       });
     });
@@ -111,12 +112,13 @@ export class WalletService {
     // TODO: save all addresses
   }
 
-  importWallet(wif: string) {
+  importWallet(wif: string, name?: string) {
     this.logger.info('Importing wallet from WIF...');
     let keyPair = BitcoinLib.ECPair.fromWIF(wif, this.network);
     this.walletCache = {
       wif: wif,
-      address: keyPair.getAddress()
+      address: keyPair.getAddress(),
+      name: name ? name : 'My bitcoin wallet'
     };
     this.save(this.walletCache);
   }
@@ -140,46 +142,79 @@ export class WalletService {
     });
   }
 
-  sendTransaction(wif: string, address: string, amountSat: number) {}
-
-    /*
-  sendTransaction(wif: string, address: string, amountSat: number) {
-    let loading = this.loadingCtrl.create({
-      content: 'Sending transaction...'
-    });
-    loading.present();
-    let keyPair = BitcoinLib.ECPair.fromWIF(wif, this.network);
-    let tx = new BitcoinLib.TransactionBuilder(this.network);
-
-    this.blockchain.getEstimateFee().map(res => res.json()).subscribe(feeBTC => {
-      let feeSat = parseInt((feeBTC['2'] * 100000000).toFixed(0));
-      let finalAmountSat = amountSat - feeSat;
-
-      this.blockchain.getUnspentOutputs(this.address).map(res => res.json()).subscribe(inputs => {
-        _.forEach(inputs, function(value) {
-          tx.addInput(value.txid, value.vout);
-        });
-        tx.maximumFeeRate = feeSat;
-        tx.addOutput(address, finalAmountSat);
-        _.forEach(inputs, function(value, i) {
-          tx.sign(i, keyPair);
-        });
-        let rawTx = tx.build().toHex();
-        this.blockchain.broadcastTx(rawTx).map(res => res.json()).subscribe(data => {
-          let alert = this.alertCtrl.create({
-            title: 'Transaction sent!',
-            subTitle: address,
-            buttons: ['OK']
-          });
-          setTimeout(() => {
-            loading.dismiss();
-            alert.present();
-          }, 1000);
+  prepareTx(toAmountBTC: number) {
+    return new Promise((resolve, reject) => {
+      if (toAmountBTC >= this.walletCache.balance) return reject('Insufficient funds');
+      this.blockchain.getEstimateFee().then((feeBTC: number) => {
+        if (feeBTC >= this.walletCache.balance) {
+          return reject('Insufficient funds for fee');
+        }
+        let finalAmountBTC = Number((toAmountBTC + feeBTC).toFixed(8));
+        let returnAmount = Number((this.walletCache.balance - finalAmountBTC).toFixed(8));
+        if (finalAmountBTC > this.walletCache.balance) return reject('Insufficient funds');
+        resolve({
+          amount: toAmountBTC,
+          fee: feeBTC,
+          returnAmount: returnAmount
         });
       });
     });
   }
-     */
+
+  getSendMaxInfo() {
+    let balanceBTC = this.walletCache.balance;
+    return new Promise((resolve, reject) => {
+      this.blockchain.getEstimateFee().then((feeBTC: number) => {
+        if (feeBTC >= balanceBTC) {
+          return reject('Insufficient funds for fee');
+        }
+        let finalAmountBTC = Number((balanceBTC - feeBTC).toFixed(8));
+        resolve({
+          amount: finalAmountBTC,
+          fee: feeBTC,
+          returnAmount: 0 // Should be always zero
+        });
+      });
+    });
+  }
+
+  getRawTx(toAddress: string, toAmount: number, toFee: number, returnAmount?: number) {
+    return new Promise((resolve, reject) => {
+      let keyPair = BitcoinLib.ECPair.fromWIF(this.walletCache.wif, this.network);
+      let tx = new BitcoinLib.TransactionBuilder(this.network);
+
+      this.blockchain.getUnspentOutputs(this.walletCache.address).map(res => res.json()).subscribe(inputs => {
+        _.forEach(inputs, function(value) {
+          tx.addInput(value.txid, value.vout);
+        });
+        tx.maximumFeeRate = toFee;
+        tx.addOutput(toAddress, toAmount);
+        if (returnAmount) {
+          tx.addOutput(this.walletCache.address, returnAmount);
+        }
+        _.forEach(inputs, function(value, i) {
+          tx.sign(i, keyPair);
+        });
+        let rawTx = tx.build().toHex();
+        resolve(rawTx);
+      });
+    });
+  }
+
+  sendTx(rawTx: string) {
+    return new Promise((resolve, reject) => {
+      this.blockchain.broadcastTx(rawTx).map(res => res.json()).subscribe(data => {
+        resolve(data);
+      }, (err) => {
+        reject(err['_body'] || err);
+      });
+    });
+  }
+
+  setWalletName(name: string) {
+    this.walletCache.name = name;
+    this.save(this.walletCache);
+  }
 
 }
 

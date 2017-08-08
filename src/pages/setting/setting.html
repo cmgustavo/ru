@@ -15,6 +15,11 @@
   <ion-list>
     <ion-item-group>
       <ion-item-divider color="light">{{ 'Wallet' | translate }}</ion-item-divider>
+      <ion-item (click)="setWalletName()">
+        <ion-icon name="person" item-start></ion-icon>
+        {{ 'Name' | translate }}
+        <ion-note item-end>{{ walletName }}</ion-note>
+      </ion-item>
       <ion-item>
         <ion-icon name="hammer" item-start></ion-icon>
         <ion-label>{{ 'Fee' | translate }}</ion-label>

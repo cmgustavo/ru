@@ -17,6 +17,7 @@ import { ImportPage } from '../pages/import/import';
 import { SettingPage } from '../pages/setting/setting';
 import { AboutPage } from '../pages/about/about';
 import { ActionsPage } from '../pages/actions/actions';
+import { SendPage } from '../pages/send/send';
 
 /* Feature Modules */
 import { Toast } from '@ionic-native/toast';
@@ -43,7 +44,8 @@ export function createTranslateLoader(http: Http) {
     ImportPage,
     SettingPage,
     AboutPage,
-    ActionsPage
+    ActionsPage,
+    SendPage
   ],
   imports: [
     HttpModule,
@@ -68,7 +70,8 @@ export function createTranslateLoader(http: Http) {
     ExportPage,
     SettingPage,
     AboutPage,
-    ActionsPage
+    ActionsPage,
+    SendPage
   ],
   providers: [
     StatusBar,

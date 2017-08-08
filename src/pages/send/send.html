@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>{{ 'Send funds' | translate }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <form (ngSubmit)="prepareSend()">
+    <ion-list>
+      <ion-item>
+        <ion-label stacked>{{ 'Bitcoin address' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="toAddress" name="toAddress"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'Amount' | translate }}</ion-label>
+        <ion-input type="number" [(ngModel)]="toAmount" name="toAmount"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'Fee' | translate }}</ion-label>
+        <ion-select [(ngModel)]="feeLevel" name="feeLevel" [disabled]="true">
+          <ion-option [value]="'priority'">{{ 'Priority' | translate }}</ion-option>
+          <ion-option [value]="'normal'">{{ 'Normal' | translate }}</ion-option>
+          <ion-option [value]="'economy'">{{ 'Economy' | translate }}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'Use all funds' | translate }}</ion-label>
+        <ion-toggle [(ngModel)]="isSendAll" name="isSendAll" (ionChange)="sendAll()"></ion-toggle>
+      </ion-item>
+    </ion-list>
+    <button type="submit" [disabled]="!toAddress || !toAmount" ion-button block>{{ 'Send' | translate }}</button>
+  </form>
+
+</ion-content>
