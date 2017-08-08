@@ -15,9 +15,9 @@ export class WalletService {
   private network: Object;
   private networkName: string;
 
-  private walletCache: Object = {
-    wif: null,
-    address: null,
+  private walletCache: Wallet = {
+    wif: '',
+    address: '',
     name: 'My simple wallet',
     balance: 0
   };
@@ -108,7 +108,6 @@ export class WalletService {
     let root = BitcoinLib.HDNode.fromSeedBuffer(seed, this.network);
     for (let i = 0; i < this.MAX_ADDRESSES; i++) {
       let path = "m\/" + net  + "\'/0/" + i;
-      let rut = root.derivePath(path);
       let addr = root.derivePath(path).getAddress();
       addresses.push(addr);
     }
@@ -176,4 +175,11 @@ export class WalletService {
   }
      */
 
+}
+
+interface Wallet {
+  wif: string;
+  address: string;
+  name?: string;
+  balance?: number;
 }

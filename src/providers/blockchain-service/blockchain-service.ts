@@ -12,6 +12,7 @@ import { ConfigService } from '../config-service/config-service';
 @Injectable()
 export class BlockchainService {
   host: string;
+  feeLevel: string = 'normal';
 
   constructor(
     public http: Http,
@@ -22,6 +23,7 @@ export class BlockchainService {
     logger.debug('BlockchainService initialized.');
 
     this.setHost(this.config.get()['network']);
+    this.setFeeLevel(this.config.get()['feeLevel']);
 
     this.events.subscribe('config:updated', (config) => {
       this.setHost(config['network']);
@@ -34,6 +36,10 @@ export class BlockchainService {
     } else {
       this.host = 'https://test-insight.bitpay.com/api/';
     }
+  }
+
+  setFeeLevel(level: string) {
+    this.feeLevel = level;
   }
 
   getBalance(addresses: string[]) {
@@ -73,7 +79,18 @@ export class BlockchainService {
   }
 
   getEstimateFee() {
-    let url = this.host + 'utils/estimatefee';
+    let blocks;
+    switch(this.feeLevel) {
+      case 'priority': blocks = 2;
+        break;
+      case 'normal': blocks = 6;
+        break;
+      case 'economy': blocks = 24;
+        break;
+      default: blocks = 6;
+        break;
+    }
+    let url = this.host + 'utils/estimatefee?nbBlocks=' + blocks;
     return this.http.get(url);
   }
 

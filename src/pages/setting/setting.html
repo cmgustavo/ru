@@ -13,22 +13,39 @@
 <ion-content>
 
   <ion-list>
-    <ion-item>
-      <ion-icon name="cloud" item-start></ion-icon>
-      <ion-label>Livenet</ion-label>
-      <ion-toggle [(ngModel)]="isLivenet" (ionChange)="toggleNetwork()"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-icon name="globe" item-start></ion-icon>
-      <ion-label>
-        {{ 'Language' | translate }}
-      </ion-label>
-      <ion-select
-        [(ngModel)]="currentLanguage"
-        (ionChange)="translateTo(currentLanguage)">
-        <ion-option *ngFor="let lang of availableLanguages" [value]="lang.isoCode">{{ lang.name }}</ion-option>
-      </ion-select>
-    </ion-item>
+    <ion-item-group>
+      <ion-item-divider color="light">Bitcoin</ion-item-divider>
+      <ion-item>
+        <ion-icon name="hammer" item-start></ion-icon>
+        <ion-label>{{ 'Fee' | translate }}</ion-label>
+        <ion-select
+                  [(ngModel)]="selectedFeeLevel"
+                  (ionChange)="setFeeLevel(selectedFeeLevel)">
+          <ion-option [value]="'priority'">{{ 'Priority' | translate }}</ion-option>
+          <ion-option [value]="'normal'">{{ 'Normal' | translate }}</ion-option>
+          <ion-option [value]="'economy'">{{ 'Economy' | translate }}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-icon name="cloud" item-start></ion-icon>
+        <ion-label>Livenet</ion-label>
+        <ion-toggle [(ngModel)]="isLivenet" (ionChange)="toggleNetwork()"></ion-toggle>
+      </ion-item>
+    </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider color="light">{{ 'Application' | translate }}</ion-item-divider>
+      <ion-item>
+        <ion-icon name="globe" item-start></ion-icon>
+        <ion-label>
+          {{ 'Language' | translate }}
+        </ion-label>
+        <ion-select
+                  [(ngModel)]="currentLanguage"
+                  (ionChange)="translateTo(currentLanguage)">
+          <ion-option *ngFor="let lang of availableLanguages" [value]="lang.isoCode">{{ lang.name }}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-item-group>
   </ion-list>
 
 </ion-content>

@@ -10,7 +10,8 @@ export class ConfigService {
   private configCache: object;
   private default: object = {
     language: 'en',
-    network: 'testnet'
+    network: 'testnet',
+    feeLevel: 'normal'
   };
 
   constructor(
@@ -34,6 +35,10 @@ export class ConfigService {
 
             if (_.isEmpty(this.configCache['network'])) {
               this.configCache['network'] = this.default['network'];
+            }
+
+            if (_.isEmpty(this.configCache['feeLevel'])) {
+              this.configCache['feeLevel'] = this.default['feeLevel'];
             }
           } else {
             this.configCache = _.clone(this.default);

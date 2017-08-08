@@ -12,6 +12,7 @@ export class SettingPage {
   isLivenet: boolean;
   availableLanguages: Array<Object>;
   currentLanguage: string;
+  selectedFeeLevel: string;
 
   constructor(
     public navCtrl: NavController,
@@ -23,6 +24,8 @@ export class SettingPage {
 
     this.availableLanguages = this.language.availables;
     this.currentLanguage = this.language.current;
+    this.selectedFeeLevel = cnf['feeLevel'];
+    console.log('[setting.ts:27]',this.selectedFeeLevel); //TODO
     if (cnf && cnf['network'] == 'livenet') {
       this.isLivenet = true;
     } else {
@@ -42,6 +45,10 @@ export class SettingPage {
   toggleNetwork() {
     let currentNetwork = this.isLivenet ? 'livenet' : 'testnet';
     this.config.set({ network: currentNetwork });
+  }
+
+  setFeeLevel() {
+    this.config.set({ feeLevel: this.selectedFeeLevel });
   }
 
 }
