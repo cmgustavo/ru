@@ -46,7 +46,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
     this.wallet.init().then((wallet) => {
       this.address = wallet['address'];
       this.balance = wallet['balance'];
@@ -59,7 +58,6 @@ export class HomePage {
     this.updatingBalance = true;
     this.wallet.getBalance().then((balance) => {
       this.balance = Number(balance);
-      this.wallet.updateBalance(this.balance);
       setTimeout(() => {
         this.updatingBalance = false;
       }, 500);
@@ -244,7 +242,7 @@ export class HomePage {
       this.barcodeScanner.scan().then((barcodeData) => {
         this.wallet.sendTransaction(this.wif, barcodeData.text, this.balanceSat);
       }, (err) => {
-        console.log(err);
+        this.logger.error(err);
       });
     } else {
       let prompt = this.alertCtrl.create({
@@ -258,9 +256,7 @@ export class HomePage {
         buttons: [
           {
             text: 'Cancel',
-            handler: data => {
-              console.log('Cancel clicked');
-            }
+            role: 'cancel'
           },
           {
             text: 'OK',

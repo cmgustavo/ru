@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner'
+import { Logger } from '@nsalaun/ng-logger';
 import { HomePage } from '../home/home';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 import * as _ from "lodash";
@@ -18,16 +19,13 @@ export class ImportPage {
   constructor(
     private barcodeScanner: BarcodeScanner,
     private wallet: WalletService,
+    private logger: Logger,
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public plt: Platform
   ) {
     this.isCordova = this.plt.is('cordova') ? true : false;
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ImportPage');
   }
 
   import() {
@@ -65,7 +63,7 @@ export class ImportPage {
     this.barcodeScanner.scan().then((barcodeData) => {
       this.form['wif'] = barcodeData.text;
     }, (err) => {
-      console.log(err);
+      this.logger.error(err);
     });
   }
 

@@ -95,10 +95,6 @@ export class WalletService {
     });
   }
 
-  updateBalance(balance: number) {
-    this.save({balance: balance});
-  }
-
   importWalletBip39(code: string) {
     let addresses = [];
     if (!Bip39.validateMnemonic(code)) return;

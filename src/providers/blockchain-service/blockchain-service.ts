@@ -20,7 +20,7 @@ export class BlockchainService {
     public events: Events,
     private config: ConfigService
   ) {
-    logger.debug('BlockchainService initialized.');
+    this.logger.debug('BlockchainService initialized.');
 
     this.setHost(this.config.get()['network']);
     this.setFeeLevel(this.config.get()['feeLevel']);

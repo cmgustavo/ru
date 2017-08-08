@@ -25,10 +25,6 @@ export class ExportPage {
     this.form['wif'] = this.wallet.get()['wif'];
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ExportPage');
-  }
-
   export() {
     if (_.isEmpty(this.form['wif'])) return;
     if (this.plt.is('cordova')) {

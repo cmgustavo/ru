@@ -32,10 +32,6 @@ export class SettingPage {
     }
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingPage');
-  }
-
   translateTo(lang: string) {
     this.currentLanguage = lang;
     this.language.set(lang);

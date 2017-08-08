@@ -11,7 +11,7 @@ export class AppService {
     public http: Http,
     public logger: Logger
   ) {
-    logger.debug('AppService initialized.');
+    this.logger.debug('AppService initialized.');
   }
 
   get() {
