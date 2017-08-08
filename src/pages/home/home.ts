@@ -76,6 +76,7 @@ export class HomePage {
     loading.present();
     this.wallet.create().then((wallet) => {
       this.address = wallet['address'];
+      this.walletName = wallet['name'];
       this.updateBalance();
       setTimeout(() => {
         loading.dismiss();
@@ -124,10 +125,7 @@ export class HomePage {
       buttons: [
         {
           text: 'Cancel',
-          role: 'cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
+          role: 'cancel'
         },
         {
           text: 'Save',

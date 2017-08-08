@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.gustavo.ru" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>RU</name>
-    <description>Receiver Unlimited</description>
+    <description>Receiver unlimited</description>
     <author email="cmgustavo83@gmail.com" href="http://bloggus.com.ar/">Gustavo Cortez</author>
     <content src="index.html" />
     <access origin="*" />
