@@ -1,10 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Logger } from '@nsalaun/ng-logger';
 import { TranslateService } from '@ngx-translate/core';
-
 
 import { HomePage } from '../pages/home/home';
 import { ExportPage } from '../pages/export/export';
@@ -32,7 +31,6 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
-    public events: Events,
     private logger: Logger,
     private translate: TranslateService,
     private app: AppService

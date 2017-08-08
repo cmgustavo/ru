@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
 import { LanguageService } from '../../providers/language-service/language-service';
 import { ConfigService } from '../../providers/config-service/config-service';
@@ -15,8 +14,6 @@ export class SettingPage {
   selectedFeeLevel: string;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
     private language: LanguageService,
     private config: ConfigService
   ) {

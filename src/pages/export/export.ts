@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Platform } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Logger } from '@nsalaun/ng-logger';
@@ -18,9 +18,7 @@ export class ExportPage {
     private socialSharing: SocialSharing,
     private wallet: WalletService,
     private logger: Logger,
-    public plt: Platform,
-    public navCtrl: NavController,
-    public navParams: NavParams
+    public plt: Platform
   ) {
     this.form['wif'] = this.wallet.get()['wif'];
   }

@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { Platform } from 'ionic-angular';
-import { AlertController } from 'ionic-angular';
-import { ActionSheetController } from 'ionic-angular';
-import { PopoverController } from 'ionic-angular';
+import { Platform, AlertController, ActionSheetController, PopoverController, LoadingController } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Toast } from '@ionic-native/toast';
-import { LoadingController } from 'ionic-angular';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner'
 import { TranslateService } from '@ngx-translate/core';
+
 import { ActionsPage } from '../actions/actions';
+
 import { WalletService } from '../../providers/wallet-service/wallet-service';
 
 @Component({
@@ -28,7 +25,6 @@ export class HomePage {
   updatingBalance: boolean;
 
   constructor(
-    public navCtrl: NavController,
     public plt: Platform,
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController,

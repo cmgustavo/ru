@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
+import { NavController, AlertController, Platform } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner'
 import { Logger } from '@nsalaun/ng-logger';
 import { HomePage } from '../home/home';
@@ -21,7 +21,6 @@ export class ImportPage {
     private wallet: WalletService,
     private logger: Logger,
     public navCtrl: NavController,
-    public navParams: NavParams,
     public alertCtrl: AlertController,
     public plt: Platform
   ) {

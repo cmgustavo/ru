@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 import { AppService } from '../../providers/app-service/app-service';
 
 @Component({
@@ -10,9 +9,7 @@ export class AboutPage {
   private appInfo: object;
 
   constructor(
-    private app: AppService,
-    public navCtrl: NavController,
-    public navParams: NavParams
+    private app: AppService
   ) {
     this.app.get().subscribe((app) => {
       this.appInfo = app;

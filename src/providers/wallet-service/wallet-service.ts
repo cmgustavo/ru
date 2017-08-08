@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { LoadingController } from 'ionic-angular';
-import { AlertController } from 'ionic-angular';
+import { LoadingController, AlertController } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
+
 import { BlockchainService } from '../../providers/blockchain-service/blockchain-service';
 import { ConfigService } from '../../providers/config-service/config-service';
 import { StorageService } from '../storage-service/storage-service';
+
 import * as _ from "lodash";
 import * as BitcoinLib from 'bitcoinjs-lib';
 import * as Bip39 from 'bip39';
