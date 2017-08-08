@@ -12,5 +12,12 @@ page-home {
   .balance {
     padding-left: 15px;
     font-weight: bold;
+    .value {
+      cursor: pointer;
+    }
+    .spinner {
+      height: 20px;
+      vertical-align: middle;
+    }
   }
 }

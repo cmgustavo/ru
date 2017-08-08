@@ -10,7 +10,7 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header>
-      {{ 'My bitcoin address' | translate }}
+      {{ walletName }}
     </ion-card-header>
     <ion-card-content>
       <ngx-qrcode [qrc-value]="address"></ngx-qrcode>
@@ -25,8 +25,12 @@
 <ion-footer>
   <ion-toolbar>
     <p class="balance">
-      <span *ngIf="balance >= 0 && !updatingBalance; else checkingBalance">{{balance}} BTC</span>
-      <ng-template #checkingBalance>...</ng-template>
+      <span class="value" *ngIf="balance >= 0 && !updatingBalance; else checkingBalance" (click)="updateBalance()">
+        {{balance}} BTC
+      </span>
+      <ng-template #checkingBalance>
+        <ion-spinner name="dots"></ion-spinner>
+      </ng-template>
     </p>
     <ion-buttons end>
       <button ion-button icon-only (click)="showWalletActions($event)">

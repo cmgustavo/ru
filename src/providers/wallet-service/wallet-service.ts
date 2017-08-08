@@ -15,12 +15,7 @@ export class WalletService {
   private network: Object;
   private networkName: string;
 
-  private walletCache: Wallet = {
-    wif: '',
-    address: '',
-    name: 'My simple wallet',
-    balance: 0
-  };
+  private walletCache: Wallet;
 
   constructor(
     private storage: StorageService,
@@ -36,7 +31,7 @@ export class WalletService {
   init() {
     return new Promise((resolve, reject) => {
 
-      if (!_.isEmpty(this.walletCache['address'])) {
+      if (!_.isEmpty(this.walletCache)) {
         resolve(this.walletCache);
         return;
       }
@@ -57,11 +52,12 @@ export class WalletService {
       this.storage.getWallet(this.networkName).then((localWallet) => {
         if (localWallet) {
           this.walletCache = JSON.parse(localWallet);
+          resolve(this.walletCache);
         } else {
-          // Create a new wallet
-          this.createWallet();
+          this.create().then((wallet) => {
+            resolve(wallet);
+          });
         }
-        resolve(this.walletCache);
       });
     });
   }
@@ -99,6 +95,10 @@ export class WalletService {
     });
   }
 
+  updateBalance(balance: number) {
+    this.save({balance: balance});
+  }
+
   importWalletBip39(code: string) {
     let addresses = [];
     if (!Bip39.validateMnemonic(code)) return;
@@ -124,14 +124,23 @@ export class WalletService {
     this.save(this.walletCache);
   }
 
-  createWallet() {
+  create(name?: string) {
     this.logger.info('Creating wallet...');
-    let keyPair = BitcoinLib.ECPair.makeRandom({ network: this.network });
-    this.walletCache = {
-      wif: keyPair.toWIF(),
-      address: keyPair.getAddress()
-    };
-    this.save(this.walletCache);
+    return new Promise((resolve, reject) => {
+      try {
+        let keyPair = BitcoinLib.ECPair.makeRandom({ network: this.network });
+        this.walletCache = {
+          wif: keyPair.toWIF(),
+          address: keyPair.getAddress(),
+          name: name ? name : 'My bitcoin wallet'
+        };
+        this.save(this.walletCache);
+        resolve(this.walletCache);
+      } catch(err) {
+        this.logger.error(err);
+        reject(err);
+      };
+    });
   }
 
   sendTransaction(wif: string, address: string, amountSat: number) {}

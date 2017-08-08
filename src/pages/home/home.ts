@@ -4,7 +4,6 @@ import { Platform } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import { PopoverController } from 'ionic-angular';
-import { Events } from 'ionic-angular';
 import { Logger } from '@nsalaun/ng-logger';
 import { Clipboard } from '@ionic-native/clipboard';
 import { Toast } from '@ionic-native/toast';
@@ -22,6 +21,7 @@ import { WalletService } from '../../providers/wallet-service/wallet-service';
 export class HomePage {
   wif: string;
   address: string;
+  walletName: string;
   isCordova: boolean;
   balance: number;
   balanceSat: number;
@@ -33,7 +33,6 @@ export class HomePage {
     public alertCtrl: AlertController,
     public actionSheetCtrl: ActionSheetController,
     public loadingCtrl: LoadingController,
-    public events: Events,
     public popoverCtrl: PopoverController,
     private logger: Logger,
     private barcodeScanner: BarcodeScanner,
@@ -44,41 +43,44 @@ export class HomePage {
     private wallet: WalletService
   ) {
     this.isCordova = this.plt.is('cordova') ? true : false;
-    this.events.subscribe('wallet:updated', () => {
-      // TODO
-    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HomePage');
     this.wallet.init().then((wallet) => {
       this.address = wallet['address'];
+      this.balance = wallet['balance'];
+      this.walletName = wallet['name'];
       this.updateBalance();
     });
   }
 
   updateBalance() {
-    let loading;
-    this.translate.get('Please wait...').subscribe((res: string) => {
-      loading = this.loadingCtrl.create({
-        content: res
-      });
-    });
     this.updatingBalance = true;
-    loading.present();
     this.wallet.getBalance().then((balance) => {
       this.balance = Number(balance);
+      this.wallet.updateBalance(this.balance);
       setTimeout(() => {
         this.updatingBalance = false;
-        loading.dismiss();
-      }, 1000);
+      }, 500);
     });
   }
 
   createWallet() {
-    this.wallet.createWallet();
-    this.address = this.wallet.get()['address'];
-    this.updateBalance();
+    let loading;
+    this.translate.get('Creating wallet...').subscribe((res: string) => {
+      loading = this.loadingCtrl.create({
+        content: res
+      });
+    });
+    loading.present();
+    this.wallet.create().then((wallet) => {
+      this.address = wallet['address'];
+      this.updateBalance();
+      setTimeout(() => {
+        loading.dismiss();
+      }, 500);
+    });
   }
 
   copyToClipboard(data: string) {
@@ -106,6 +108,39 @@ export class HomePage {
         this.logger.log('Error');
       });
     }
+  }
+
+  setWalletName() {
+    let alert = this.alertCtrl.create({
+      title: 'Wallet name',
+      inputs: [
+        {
+          name: 'name',
+          placeholder: 'My saving wallet',
+          value: this.walletName,
+          type: 'text'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: data => {
+            if (data && data.name) {
+              this.walletName = data.name;
+              this.wallet.save(data);
+            }
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   confirmNewWallet() {
@@ -161,6 +196,10 @@ export class HomePage {
         }
         case 'send': {
           this.confirmSendAll();
+          break;
+        }
+        case 'name': {
+          this.setWalletName();
           break;
         }
         default: {

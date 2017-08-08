@@ -25,7 +25,6 @@ export class SettingPage {
     this.availableLanguages = this.language.availables;
     this.currentLanguage = this.language.current;
     this.selectedFeeLevel = cnf['feeLevel'];
-    console.log('[setting.ts:27]',this.selectedFeeLevel); //TODO
     if (cnf && cnf['network'] == 'livenet') {
       this.isLivenet = true;
     } else {
