@@ -1,5 +1,6 @@
 <img src="https://github.com/cmgustavo/ru/blob/master/resources/icon.png" alt="RU" width="79">
-A simple bitcoin wallet.
+
+A simple bitcoin wallet using [Ionic 3](http://ionicframework.com/), [BitcoinJS](https://bitcoinjs.org) and [Insight](https://insight.bitpay.com).
 
 ### Getting started
 
