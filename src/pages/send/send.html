@@ -2,6 +2,11 @@
 
   <ion-navbar color="dark">
     <ion-title>{{ 'Send funds' | translate }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="scanQrCode()">
+        <ion-icon name="qr-scanner"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

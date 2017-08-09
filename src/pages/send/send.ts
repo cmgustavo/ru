@@ -39,7 +39,7 @@ export class SendPage {
   scanQrCode() {
     this.barcodeScanner.scan().then((barcodeData) => {
       if (barcodeData && barcodeData.text) {
-        // paste address
+        this.toAddress = barcodeData.text;
       }
       }, (err) => {
         this.logger.error(err);
