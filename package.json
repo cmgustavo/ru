@@ -63,7 +63,7 @@
         "@types/lodash": "4.14.71",
         "typescript": "2.3.4"
     },
-    "description": "Receiver unlimited",
+    "description": "RU Bitcoin Wallet",
     "cordova": {
         "plugins": {
             "cordova-sqlite-storage": {},
